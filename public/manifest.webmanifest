@@ -1,0 +1,13 @@
+{
+  "name": "Carnet d'auto-évaluation Kinyobi",
+  "short_name": "Auto-évaluation",
+  "start_url": "/Kinyotoeval/",
+  "display": "standalone",
+  "background_color": "#ECE7DA",
+  "theme_color": "#262319",
+  "lang": "fr",
+  "icons": [
+    { "src": "/Kinyotoeval/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/Kinyotoeval/icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}
