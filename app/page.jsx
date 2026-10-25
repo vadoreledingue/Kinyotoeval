@@ -1024,8 +1024,9 @@ export default function Page() {
       // Le Blob et le File restent en mémoire ; aucune transmission au serveur.
       const fichier = typeof File === "function"
         ? new File([blob], nomFichier, { type: "application/pdf", lastModified: Date.now() }) : null;
-      setPdfPrepare({ blob, fichier, nomFichier, pages: pdf.getNumberOfPages(), signature });
-      setMessage("");
+      const prepare = { blob, fichier, nomFichier, pages: pdf.getNumberOfPages(), signature };
+      setPdfPrepare(prepare);
+      demanderTelechargementPDF(prepare);
     } catch (error) {
       console.error(error);
       setMessage(error?.message || "Impossible de produire le rapport sur cet appareil.");
@@ -1062,19 +1063,14 @@ export default function Page() {
     }
   }
 
-  function telechargerPDFPrepare() {
-    if (busyRef.current) return;
-    if (!pdfCourant || erreursEvaluation(nom, objectifs).length || pdfCourant.signature !== signatureRef.current) {
-      setMessage("Prépare d'abord le PDF avec tes réponses actuelles.");
-      return;
-    }
+  function demanderTelechargementPDF(prepare) {
     let url = null;
     let lien = null;
     try {
-      url = URL.createObjectURL(pdfCourant.blob);
+      url = URL.createObjectURL(prepare.blob);
       lien = document.createElement("a");
       lien.href = url;
-      lien.download = pdfCourant.nomFichier;
+      lien.download = prepare.nomFichier;
       lien.style.display = "none";
       document.body.appendChild(lien);
       lien.click();
@@ -1086,6 +1082,15 @@ export default function Page() {
       // Laisse au navigateur le temps de prendre en charge le téléchargement.
       if (url) window.setTimeout(() => URL.revokeObjectURL(url), 60000);
     }
+  }
+
+  function telechargerPDFPrepare() {
+    if (busyRef.current) return;
+    if (!pdfCourant || erreursEvaluation(nom, objectifs).length || pdfCourant.signature !== signatureRef.current) {
+      setMessage("Prépare d'abord le PDF avec tes réponses actuelles.");
+      return;
+    }
+    demanderTelechargementPDF(pdfCourant);
   }
 
   function reinitialiser() {
