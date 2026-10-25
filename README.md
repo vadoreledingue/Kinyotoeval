@@ -23,3 +23,4 @@ Ouvrir [http://localhost:3000](http://localhost:3000).
 ## Déploiement
 
 Le site est déployé automatiquement sur GitHub Pages via GitHub Actions à chaque push sur `main`.
+
